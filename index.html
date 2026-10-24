@@ -1506,9 +1506,9 @@ function quartile(sorted,p){
 function consensusFor(edgeId,ballots){
   const votes=ballots.filter(x=>x.edge_id===edgeId);
   if(!votes.length)return null;
-  const plus=votes.filter(x=>Number(x.sign)>0).length,minus=votes.length-plus;
+  const plus=votes.filter(x=>Number(x.sign)>0&&Number(x.intensity)>0).length,minus=votes.filter(x=>Number(x.sign)<0&&Number(x.intensity)>0).length;
   const sign=plus===minus?0:plus>minus?1:-1;
-  const matching=votes.filter(x=>Number(x.sign)===sign).map(x=>Number(x.intensity)).sort((a,b)=>a-b);
+  const matching=votes.filter(x=>Number(x.sign)===sign&&Number(x.intensity)>0).map(x=>Number(x.intensity)).sort((a,b)=>a-b);
   const all=votes.map(x=>Number(x.intensity)).sort((a,b)=>a-b);
   const median=(arr)=>quartile(arr,0.5);
   const evidence={percepcao:0,conhecimento_local:0,literatura:0,dados:0};
